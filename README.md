@@ -10,6 +10,7 @@ Section 2:
 Section 3:
 
     SonarLint is easily downloadable plugin in idea and I am more used to it.
+    Junit coverage: interview-solution/coverage.JPG
 
 Section 5:
     There is no Licensed jar used.
