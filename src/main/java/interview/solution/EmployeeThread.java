@@ -1,9 +1,7 @@
 package interview.solution;
 
 import interview.solution.domain.RawMaterial;
-
 import java.util.concurrent.atomic.AtomicInteger;
-
 import static interview.solution.ConveyorBelt.*;
 
 public class EmployeeThread extends Thread {

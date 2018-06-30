@@ -1,7 +1,6 @@
 package interview.solution;
 
 import interview.solution.domain.RawMaterial;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -45,7 +44,12 @@ public class ConveyorBelt {
         return totalProduct.get();
     }
 
-
+    /**
+     * Prefered not to have Thread.sleep instead we can calculate total time.
+     * @param noOfProducts
+     * @param timeToAssembleAProduct
+     * @return
+     */
     public int timeConsumedToClearAllProductsInSec(Integer noOfProducts, Integer timeToAssembleAProduct) {
         return noOfProducts * timeToAssembleAProduct;
     }
