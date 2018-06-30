@@ -7,6 +7,9 @@ public class ConveyorBeltTest {
 
     private ConveyorBelt belt = new ConveyorBelt();
 
+    /**
+     * assumption is to have boults exactly double of machine
+     */
     @Test
     public void verifyConveyorBelt(){
         int totalProducts = belt.totalProducts(3, 6);

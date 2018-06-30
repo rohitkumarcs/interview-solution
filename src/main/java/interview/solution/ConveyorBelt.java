@@ -18,10 +18,6 @@ public class ConveyorBelt {
     public static boolean isBolts = true;
 
     private Integer noOfEmployees = 3;
-    public static void main(String[] args) {
-        ConveyorBelt belt = new ConveyorBelt();
-        belt.totalProducts(3, 6);
-    }
 
     /**
      *
@@ -35,8 +31,9 @@ public class ConveyorBelt {
         this.noOfBolts = new AtomicInteger(noOfBolts);
 
         ExecutorService es = Executors.newCachedThreadPool();
-        for(int i=0;i<3;i++)
+        for (int i = 0; i < noOfEmployees; i++) {
             es.execute(new EmployeeThread());
+        }
         es.shutdown();
 
         while(!es.isTerminated()) {
