@@ -6,20 +6,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class EmployeeThread extends Thread {
 
     private ConveyorBelt belt;
-    private int timeToFormProduct;
+    private long timeToFormProduct;
 
-    public EmployeeThread(ConveyorBelt belt, int timeToFormProduct) {
+    public EmployeeThread(ConveyorBelt belt, long timeToFormProduct) {
         this.belt = belt;
         this.timeToFormProduct = timeToFormProduct;
     }
 
+    @Override
     public void run() {
         try {
-            while ((belt.noOfBolts.get() + belt.noOfMachines.get() != 0)){
+            while ((belt.getNoOfBolts().get() + belt.getNoOfMachines().get() != 0)){
                 pickMaterial();
-                if((belt.machineCountToVerify.get() == belt.totalProduct.get())){
-                    belt.noOfBolts = new AtomicInteger(0);
-                    belt.noOfMachines = new AtomicInteger(0);
+                if((belt.getMachineCountToVerify().get() == belt.getTotalProduct().get())){
+                    belt.setNoOfBolts(new AtomicInteger(0));
+                    belt.setNoOfMachines(new AtomicInteger(0));
                 }
             }
 
@@ -31,30 +32,30 @@ public class EmployeeThread extends Thread {
 
     private synchronized void pickMaterial() throws InterruptedException {
         long threadCount = Thread.currentThread().getId();
-        RawMaterial material = belt.countToAssemble.get(threadCount);
+        RawMaterial material = belt.getCountToAssemble().get(threadCount);
         if(material == null){
             material = new RawMaterial();
-            belt.countToAssemble.put(threadCount, material);
+            belt.getCountToAssemble().put(threadCount, material);
         }
-        if(belt.isBolts || (belt.noOfMachines.get() == 0 && belt.noOfBolts.get() != 0)){
+        if(belt.isBolts() || (belt.getNoOfMachines().get() == 0 && belt.getNoOfBolts().get() != 0)){
             if(material.modifyBolt()){
-                belt.noOfBolts.decrementAndGet();
+                belt.getNoOfBolts().decrementAndGet();
             } else {
-                belt.noOfBolts.incrementAndGet();
+                belt.getNoOfBolts().incrementAndGet();
             }
 
-            belt.isBolts = false;
-        } else if (belt.noOfMachines.get() != 0){
-            belt.isBolts = true;
+            belt.setBolts(false);
+        } else if (belt.getNoOfMachines().get() != 0){
+            belt.setBolts(true);
             if(material.modifyMachine()){
-                belt.noOfMachines.decrementAndGet();
+                belt.getNoOfMachines().decrementAndGet();
             } else {
-                belt.noOfMachines.incrementAndGet();
+                belt.getNoOfMachines().incrementAndGet();
             }
 
         }
         if(material.isRawMaterialComplete()){
-            belt.totalProduct.incrementAndGet();
+            belt.getTotalProduct().incrementAndGet();
             Thread.sleep(timeToFormProduct * 1000);
         }
     }

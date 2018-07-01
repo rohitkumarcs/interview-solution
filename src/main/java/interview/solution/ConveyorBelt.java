@@ -9,15 +9,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ConveyorBelt {
 
-    public AtomicInteger noOfBolts;
-    public AtomicInteger noOfMachines;
-    public AtomicInteger machineCountToVerify;
-    public AtomicInteger totalProduct = new AtomicInteger(0);
-    public Map<Long, RawMaterial> countToAssemble = new HashMap<Long, RawMaterial>();
-    public Integer totalTimeElapsed;
-
-    public boolean isBolts = true;
-
+    private AtomicInteger noOfBolts;
+    private AtomicInteger noOfMachines;
+    private AtomicInteger machineCountToVerify;
+    private AtomicInteger totalProduct = new AtomicInteger(0);
+    private Map<Long, RawMaterial> countToAssemble = new HashMap<Long, RawMaterial>();
+    private Integer totalTimeElapsed;
+    private boolean isBolts = true;
     private Integer noOfEmployees = 3;
 
     /**
@@ -52,5 +50,45 @@ public class ConveyorBelt {
      */
     public int getTotalTimeElapsed() {
         return totalTimeElapsed;
+    }
+
+    public AtomicInteger getNoOfBolts() {
+        return noOfBolts;
+    }
+
+    public AtomicInteger getNoOfMachines() {
+        return noOfMachines;
+    }
+
+    public AtomicInteger getMachineCountToVerify() {
+        return machineCountToVerify;
+    }
+
+    public AtomicInteger getTotalProduct() {
+        return totalProduct;
+    }
+
+    public Map<Long, RawMaterial> getCountToAssemble() {
+        return countToAssemble;
+    }
+
+    public boolean isBolts() {
+        return isBolts;
+    }
+
+    public void setBolts(boolean bolts) {
+        isBolts = bolts;
+    }
+
+    public Integer getNoOfEmployees() {
+        return noOfEmployees;
+    }
+
+    public void setNoOfBolts(AtomicInteger noOfBolts) {
+        this.noOfBolts = noOfBolts;
+    }
+
+    public void setNoOfMachines(AtomicInteger noOfMachines) {
+        this.noOfMachines = noOfMachines;
     }
 }
