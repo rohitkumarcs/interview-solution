@@ -2,23 +2,24 @@ package interview.solution;
 
 import interview.solution.domain.RawMaterial;
 import java.util.concurrent.atomic.AtomicInteger;
-import static interview.solution.ConveyorBelt.*;
 
 public class EmployeeThread extends Thread {
 
-    private Integer timeToFormProduct;
+    private ConveyorBelt belt;
+    private int timeToFormProduct;
 
-    public EmployeeThread(Integer timeToFormProduct) {
+    public EmployeeThread(ConveyorBelt belt, int timeToFormProduct) {
+        this.belt = belt;
         this.timeToFormProduct = timeToFormProduct;
     }
 
     public void run() {
         try {
-            while ((noOfBolts.get() + noOfMachines.get() != 0)){
+            while ((belt.noOfBolts.get() + belt.noOfMachines.get() != 0)){
                 pickMaterial();
-                if((machineCountToVerify.get() == totalProduct.get())){
-                    noOfBolts = new AtomicInteger(0);
-                    noOfMachines = new AtomicInteger(0);
+                if((belt.machineCountToVerify.get() == belt.totalProduct.get())){
+                    belt.noOfBolts = new AtomicInteger(0);
+                    belt.noOfMachines = new AtomicInteger(0);
                 }
             }
 
@@ -30,33 +31,32 @@ public class EmployeeThread extends Thread {
 
     private synchronized void pickMaterial() throws InterruptedException {
         long threadCount = Thread.currentThread().getId();
-        RawMaterial material = countToAssemble.get(threadCount);
+        RawMaterial material = belt.countToAssemble.get(threadCount);
         if(material == null){
             material = new RawMaterial();
-            countToAssemble.put(threadCount, material);
+            belt.countToAssemble.put(threadCount, material);
         }
-        if(isBolts || (noOfMachines.get() == 0 && noOfBolts.get() != 0)){
+        if(belt.isBolts || (belt.noOfMachines.get() == 0 && belt.noOfBolts.get() != 0)){
             if(material.modifyBolt()){
-                noOfBolts.decrementAndGet();
+                belt.noOfBolts.decrementAndGet();
             } else {
-                noOfBolts.incrementAndGet();
+                belt.noOfBolts.incrementAndGet();
             }
 
-            isBolts = false;
-        } else if (noOfMachines.get() != 0){
-            isBolts = true;
+            belt.isBolts = false;
+        } else if (belt.noOfMachines.get() != 0){
+            belt.isBolts = true;
             if(material.modifyMachine()){
-                noOfMachines.decrementAndGet();
+                belt.noOfMachines.decrementAndGet();
             } else {
-                noOfMachines.incrementAndGet();
+                belt.noOfMachines.incrementAndGet();
             }
 
         }
         if(material.isRawMaterialComplete()){
-            ConveyorBelt.totalProduct.incrementAndGet();
+            belt.totalProduct.incrementAndGet();
             Thread.sleep(timeToFormProduct * 1000);
         }
-
     }
 
 }

@@ -9,14 +9,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ConveyorBelt {
 
-    public static AtomicInteger noOfBolts;
-    public static AtomicInteger noOfMachines;
-    public static AtomicInteger machineCountToVerify;
-    public static AtomicInteger totalProduct = new AtomicInteger(0);
-    public static Map<Long, RawMaterial> countToAssemble = new HashMap<Long, RawMaterial>();
+    public AtomicInteger noOfBolts;
+    public AtomicInteger noOfMachines;
+    public AtomicInteger machineCountToVerify;
+    public AtomicInteger totalProduct = new AtomicInteger(0);
+    public Map<Long, RawMaterial> countToAssemble = new HashMap<Long, RawMaterial>();
     public Integer totalTimeElapsed;
 
-    public static boolean isBolts = true;
+    public boolean isBolts = true;
 
     private Integer noOfEmployees = 3;
 
@@ -34,11 +34,12 @@ public class ConveyorBelt {
         long startTime = System.currentTimeMillis();
         ExecutorService es = Executors.newCachedThreadPool();
         for (int i = 0; i < noOfEmployees; i++) {
-            es.execute(new EmployeeThread(timeToFormProduct));
+            es.execute(new EmployeeThread(this, timeToFormProduct));
         }
         es.shutdown();
 
         while(!es.isTerminated()) {
+            //Wait till all threads are terminated
         }
         long endTime = System.currentTimeMillis();
         totalTimeElapsed =  (int)(endTime-startTime)/1000;
