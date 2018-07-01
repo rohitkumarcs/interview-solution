@@ -6,6 +6,12 @@ import static interview.solution.ConveyorBelt.*;
 
 public class EmployeeThread extends Thread {
 
+    private Integer timeToFormProduct;
+
+    public EmployeeThread(Integer timeToFormProduct) {
+        this.timeToFormProduct = timeToFormProduct;
+    }
+
     public void run() {
         try {
             while ((noOfBolts.get() + noOfMachines.get() != 0)){
@@ -22,7 +28,7 @@ public class EmployeeThread extends Thread {
         }
     }
 
-    private synchronized void pickMaterial() {
+    private synchronized void pickMaterial() throws InterruptedException {
         long threadCount = Thread.currentThread().getId();
         RawMaterial material = countToAssemble.get(threadCount);
         if(material == null){
@@ -48,6 +54,7 @@ public class EmployeeThread extends Thread {
         }
         if(material.isRawMaterialComplete()){
             ConveyorBelt.totalProduct.incrementAndGet();
+            Thread.sleep(timeToFormProduct * 1000);
         }
 
     }

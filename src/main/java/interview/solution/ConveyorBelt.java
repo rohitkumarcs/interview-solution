@@ -14,6 +14,7 @@ public class ConveyorBelt {
     public static AtomicInteger machineCountToVerify;
     public static AtomicInteger totalProduct = new AtomicInteger(0);
     public static Map<Long, RawMaterial> countToAssemble = new HashMap<Long, RawMaterial>();
+    public Integer totalTimeElapsed;
 
     public static boolean isBolts = true;
 
@@ -25,29 +26,40 @@ public class ConveyorBelt {
      * @param noOfBolts
      * @return
      */
-    public int totalProducts(Integer noOfMachines, Integer noOfBolts) {
+    public int totalProducts(Integer noOfMachines, Integer noOfBolts, Integer timeToFormProduct) {
         this.noOfMachines = new AtomicInteger(noOfMachines);
         this.machineCountToVerify = new AtomicInteger(noOfMachines);
         this.noOfBolts = new AtomicInteger(noOfBolts);
 
+        long startTime = System.currentTimeMillis();
         ExecutorService es = Executors.newCachedThreadPool();
         for (int i = 0; i < noOfEmployees; i++) {
-            es.execute(new EmployeeThread());
+            es.execute(new EmployeeThread(timeToFormProduct));
         }
         es.shutdown();
 
         while(!es.isTerminated()) {
         }
+        long endTime = System.currentTimeMillis();
+        totalTimeElapsed =  (int)(endTime-startTime)/1000;
         return totalProduct.get();
     }
 
     /**
-     * Prefered not to have Thread.sleep instead we can calculate total time.
+     * Preffered not to have Thread.sleep instead we can calculate total time.
      * @param noOfProducts
      * @param timeToAssembleAProduct
      * @return
      */
     public int timeConsumedToClearAllProductsInSec(Integer noOfProducts, Integer timeToAssembleAProduct) {
         return noOfProducts * timeToAssembleAProduct;
+    }
+
+    /**
+     * actual total time in secs
+     * @return
+     */
+    public int getTotalTimeElapsed() {
+        return totalTimeElapsed;
     }
 }
