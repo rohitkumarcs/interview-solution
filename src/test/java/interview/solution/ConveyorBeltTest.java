@@ -15,6 +15,5 @@ public class ConveyorBeltTest {
         int totalProducts = belt.totalProducts(3, 6, 10);
         Assert.assertEquals(3, totalProducts);
         Assert.assertEquals(10, belt.getTotalTimeElapsed());
-        Assert.assertEquals(180, belt.timeConsumedToClearAllProductsInSec(totalProducts, 60));
     }
 }

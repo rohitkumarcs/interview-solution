@@ -46,16 +46,6 @@ public class ConveyorBelt {
     }
 
     /**
-     * Preffered not to have Thread.sleep instead we can calculate total time.
-     * @param noOfProducts
-     * @param timeToAssembleAProduct
-     * @return
-     */
-    public int timeConsumedToClearAllProductsInSec(Integer noOfProducts, Integer timeToAssembleAProduct) {
-        return noOfProducts * timeToAssembleAProduct;
-    }
-
-    /**
      * actual total time in secs
      * @return
      */
